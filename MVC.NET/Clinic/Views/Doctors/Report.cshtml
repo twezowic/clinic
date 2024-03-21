@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Clinic.Models.DoctorReport>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<h1>Doctors Reports</h1>
+
+<form asp-controller="Doctors" asp-action="Report" method="get">
+    <div class="d-inline-block mr-3">
+        <label for="start">Start Date:</label>
+        <input type="date" name="start" class="form-control" />
+    </div>
+    <div class="d-inline-block mr-3">
+        <label for="end">End Date:</label>
+        <input type="date" name="end" class="form-control" />
+    </div>
+    <div class="d-inline-block">
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Doctor Information
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkingHour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AppointmentHour)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Info()
+                </td>
+                <td>
+                    @item.WorkingHour.ToString("hh\\:mm")
+                </td>
+                <td>
+                    @item.AppointmentHour.ToString("hh\\:mm")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

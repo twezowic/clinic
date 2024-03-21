@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Clinic.Models.AppointmentFilled>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Appointments history</h1>
+
+<p>
+    @if (Global.Usertype == Global.UserType.Patients || Global.IsAdmin)
+    {
+        <a asp-action="Create">Create New</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @if (Global.Usertype == Global.UserType.Doctors || Global.IsAdmin)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.patientInfo)
+                </th>
+            }
+            @if (Global.Usertype == Global.UserType.Patients || Global.IsAdmin)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.doctorInfo)
+                </th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Start)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            @if (Global.Usertype == Global.UserType.Doctors || Global.IsAdmin)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.patientInfo)
+                </td>
+            }
+            @if (Global.Usertype == Global.UserType.Patients || Global.IsAdmin)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.doctorInfo)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Start)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details</a>
+                @if (Global.UserId == item.DoctorId)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Add comment</a>
+                }   
+                @if (DateTime.Today < item.Date)
+                {
+                  <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-danger">Cancel</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

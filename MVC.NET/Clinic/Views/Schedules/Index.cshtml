@@ -1,0 +1,76 @@
+﻿@model Clinic.Models.ScheduleViewModel
+
+
+
+@{
+    ViewData["Title"] = "Schedule";
+}
+
+<h1>Doctor Schedule for week</h1>
+@if (Global.IsAdmin)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </p>
+    <p>
+        <a asp-action="AddLastWeek" class="btn btn-info">Add Last Week</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].Specialization)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].Day)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].Start)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].End)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Doctors.Zip(Model.Schedules, (a, b) => new { doctor = a, schedule = b })) {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.doctor.FirstName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.doctor.LastName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.doctor.Specialization)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.schedule.Day)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.schedule.Start)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.schedule.End)
+            </td>
+            @if (Global.IsAdmin)
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.schedule.Id" class="btn btn-info">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.schedule.Id" class="btn btn-danger">Delete</a>
+                </td>
+            }
+        </tr>
+}
+    </tbody>
+</table>
+

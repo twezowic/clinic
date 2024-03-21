@@ -1,0 +1,10 @@
+﻿@model Clinic.Models.Patient
+
+<h2>Patient account activation</h2>
+
+<p>Do you want to activate the account?</p>
+
+<form asp-action="Activate">
+    <input type="submit" value="Activate" class="btn btn-primary" />
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

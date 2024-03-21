@@ -1,0 +1,51 @@
+﻿<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+@model dynamic
+
+<form asp-controller="Doctors" asp-action="Report2" method="get">
+    <div class="d-inline-block mr-3">
+        <label for="start">Start Date:</label>
+        <input type="date" id="start" name="start" class="form-control" />
+    </div>
+    <div class="d-inline-block mr-3">
+        <label for="end">End Date:</label>
+        <input type="date" id="end" name="end" class="form-control" />
+    </div>
+    <div class="d-inline-block">
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </div>
+</form>
+
+<div style="width: 80%; margin: auto;">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var chartData = {
+        labels: @Html.Raw(Json.Serialize(Model.labels)),
+        datasets: [
+            {
+                label: 'Working intervals number',
+                data: @Html.Raw(Json.Serialize(Model.data1)),
+                backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Appointments number',
+                data: @Html.Raw(Json.Serialize(Model.data2)),
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {}
+    });
+</script>

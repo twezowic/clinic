@@ -1,0 +1,61 @@
+﻿@model ScheduleViewModel
+<h2>Schedules to be added</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].Specialization)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].Day)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].Start)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].End)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Doctors.Zip(Model.Schedules, (a, b) => new { doctor = a, schedule = b }))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.doctor.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.doctor.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.doctor.Specialization)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.schedule.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.schedule.Start)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.schedule.End)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<form method="post" asp-action="AddLastWeek">
+    @if (Model.Schedules.Count != 0)
+    {
+        <button type="submit" class="btn btn-primary">Add Schedules</button>
+    }
+    <a asp-action="Index" class="btn btn-light">Back to List</a>
+</form>

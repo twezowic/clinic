@@ -1,0 +1,55 @@
+﻿@model Clinic.Models.DoctorSpecializationViewModel
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<h1>Doctors List</h1>
+@if (Global.IsAdmin)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-success">Add new</a>
+    </p>
+}
+<form asp-controller="Doctors" asp-action="Index" method="get">
+    <p>
+        <select asp-for="DoctorSpecialization" asp-items="Model.Specializations" class="center large">
+            <option value="">All</option>
+        </select>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].Specialization)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctors[0].LastName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Doctors) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Specialization)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
