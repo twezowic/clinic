@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Clinic.Models;
+using ReactClinic.Data;
+
+namespace ReactClinic.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AppointmentsController : ControllerBase
+    {
+        private readonly ReactClinicContext _context;
+
+        public AppointmentsController(ReactClinicContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Appointments
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointment([FromQuery] int? patientId)
+        {
+            var appointments = from m in _context.Appointment
+                          select m;
+
+            if (patientId.HasValue)
+            {
+                appointments = appointments.Where(x => x.PatientId == patientId);
+            }
+
+            if (appointments == null || !appointments.Any())
+            {
+                return NotFound();
+            }
+
+            return await appointments.ToListAsync();
+
+
+
+
+            if (_context.Appointment == null)
+          {
+              return NotFound();
+          }
+            return await _context.Appointment.ToListAsync();
+        }
+
+        // GET: api/Appointments/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Appointment>> GetAppointment(int id)
+        {
+          if (_context.Appointment == null)
+          {
+              return NotFound();
+          }
+            var appointment = await _context.Appointment.FindAsync(id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            return appointment;
+        }
+
+        // PUT: api/Appointments/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAppointment(int id, Appointment appointment)
+        {
+            if (id != appointment.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(appointment).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppointmentExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Appointments
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Appointment>> PostAppointment(Appointment appointment)
+        {
+          if (_context.Appointment == null)
+          {
+              return Problem("Entity set 'ReactClinicContext.Appointment'  is null.");
+          }
+            _context.Appointment.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAppointment", new { id = appointment.Id }, appointment);
+        }
+
+        // DELETE: api/Appointments/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            if (_context.Appointment == null)
+            {
+                return NotFound();
+            }
+            var appointment = await _context.Appointment.FindAsync(id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            _context.Appointment.Remove(appointment);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool AppointmentExists(int id)
+        {
+            return (_context.Appointment?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+    }
+}
